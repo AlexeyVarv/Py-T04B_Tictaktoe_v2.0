@@ -8,7 +8,7 @@ from web.route.auth.auth_routes import auth_bp
 
 # Создание приложения Flask
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://school21:12345@localhost/games'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://school21:12345@localhost/games'
 app.config['SECRET_KEY'] = 'sarfh7575a15adahduf58kgfh'
 
 # Инициализация DI-контейнера
