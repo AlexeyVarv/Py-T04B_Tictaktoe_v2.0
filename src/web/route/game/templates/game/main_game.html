@@ -1,0 +1,129 @@
+{% extends "layout.html" %}
+
+{% block title %}Главная - Крестики-Нолики{% endblock %}
+
+{% block content %}
+<h2>Игра - {{ game_id }}</h2>
+
+{% if message %}
+    <div class="player-type-message">{{ message }}</div>
+{% endif %}
+
+<div id="game-board" class="game-board">
+    {% for i in range(9) %}
+        <button class="cell" onclick="makeMove({{ i // 3 }}, {{ i % 3 }})">
+            {{ board[i // 3][i % 3] or ' ' }}
+        </button>
+    {% endfor %}
+</div>
+
+<div id="game-message" class="message"></div>
+
+<div>
+    <button class="restart-button" onclick="restartGame()">Начать заново</button>
+</div>
+
+<div>
+    <button class="game-button" onclick="saveGame()">Сохранить игру</button>
+</div>
+
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<script>
+    const socket = io('/game'); // Подключение к пространству имен '/game'
+
+    // Логирование подключения
+    socket.on('connect', () => {
+        console.log('Подключение к серверу установлено');
+    });
+
+    // Логирование ошибок подключения
+    socket.on('connect_error', (error) => {
+        console.error('Ошибка подключения:', error);
+    });
+
+    const game_id = '{{ game_id }}';
+    const current_player_id = '{{ current_player_id }}';
+    const game_type = {{ game_type }};
+
+    // Инициализация игры
+    socket.emit('join_game', { game_id });
+
+    // Обработка обновления доски
+    socket.on('update_board', (data) => {
+        console.log('Получено обновление доски:', data);
+        const board = data.board; // Получаем матрицу игры
+        const cells = document.querySelectorAll('.cell'); // Все ячейки на игровом поле
+
+        cells.forEach((cell, index) => {
+            const row = Math.floor(index / 3); // Вычисляем строку
+            const col = index % 3; // Вычисляем столбец
+            const cellValue = board[row][col]; // Значение ячейки из матрицы
+
+            // Преобразуем значение в символ
+            if (cellValue === 0) {
+                cell.textContent = ''; // Пустая ячейка
+            } else if (cellValue === 1) {
+                cell.textContent = 'O'; // Ячейка с "O"
+            } else if (cellValue === 2) {
+                cell.textContent = 'X'; // Ячейка с "X"
+            }
+        });
+    });
+
+    // Обработка завершения игры
+    socket.on('game_process', (data) => {
+        const messageElement = document.getElementById('game-message');
+        if (messageElement) {
+            messageElement.textContent = `${data.result}`;
+        }
+    });
+
+    // Обработка ошибок
+    socket.on('error', (data) => {
+        alert(data.message);
+    });
+    let isInputBlocked = false; // Флаг для блокировки ввода
+
+    // Обработка блокировки ввода
+    socket.on('block_input', () => {
+        isInputBlocked = true;
+        console.log('Ввод заблокирован');
+    });
+
+    // Обработка разблокировки ввода
+    socket.on('unblock_input', () => {
+        isInputBlocked = false;
+        console.log('Ввод разблокирован');
+    });
+
+    // Функция для отправки хода
+    function makeMove(row, col) {
+        if (isInputBlocked) {
+            console.log('Ввод заблокирован, ход невозможен');
+            return;
+        }
+        console.log(`Ход игрока: player_id=${current_player_id}, row=${row}, col=${col}`)
+        socket.emit('make_move', {
+            game_id: '{{ game_id }}',
+            player_id: '{{ current_player_id }}',
+            row,
+            col
+        });
+    }
+
+    // Функция для перезапуска игры
+    function restartGame() {
+        socket.emit('restart_game', { game_id });
+    }
+
+    // Функция для сохранения игры
+    function saveGame() {
+        socket.emit('save_game', { game_id });
+    }
+
+    // Обработка успешного сохранения
+    socket.on('success', (data) => {
+        alert(data.message); // Например: "Игра сохранена"
+    });
+</script>
+{% endblock %}

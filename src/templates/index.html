@@ -1,0 +1,19 @@
+<!-- home.html -->
+{% extends "layout.html" %}
+
+{% block title %}Главная - Крестики-Нолики{% endblock %}
+
+{% block content %}
+<h2>Выберите игру</h2>
+
+<!-- Ссылки для выбора игры -->
+<div class="game-options">
+    <a href="{{ url_for('game.start_game', game_type=1) }}" class="game-button">Новая игра с компьютером</a>
+    <a href="{{ url_for('game.start_game', game_type=2) }}" class="game-button">Новая игра вдвоем</a>
+    <a href="{{ url_for('game.join_game_page') }}" class="game-button">Присоединиться к игре</a>
+
+    <div class="saved-games-link">
+        <a href="{{ url_for('game.saved_games') }}" class="button-link">Мои сохраненные игры</a>
+    </div>
+</div>
+{% endblock %}

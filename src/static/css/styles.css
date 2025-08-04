@@ -1,0 +1,302 @@
+body, html {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+footer {
+    background-color: #073572;
+    color: white;
+    text-align: center;
+    height: 60px
+    padding: 10px 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* минимум — высота экрана */
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Стили для навигационной панели */
+.navbar {
+    background-color: #073572;
+    color: white;
+    padding: 10px 20px;
+}
+
+/* Контейнер для flexbox */
+.nav-container {
+    display: flex;
+    justify-content: space-between; /* Разносит элементы по краям */
+    align-items: center; /* Выравнивает элементы по вертикали */
+}
+
+/* Стили для ссылок */
+.nav-button {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    margin-top: 10px
+    margin: 0 5px;
+}
+
+.navbar nav a:hover{
+    text-decoration: none
+}
+
+.reg-button {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    margin: 0 5px;
+
+    padding: 5px 20px;
+    border: 2px solid #04AA6D;
+}
+
+.login-button {
+    margin-top: 10px;
+    padding: 5px;
+    width: 10%;
+    font-size: 1rem;
+    background-color: #3BD82A;
+    color: 202020;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+/* Группы ссылок */
+.left-links, .right-links {
+    display: flex; /* Используем flexbox для группировки ссылок */
+    gap: 10px; /* Расстояние между ссылками в группе */
+    align-items: center; /* Выравнивает ссылки по центру вертикали */
+}
+
+h1 {
+    margin-top: 20px;
+    color: #333;
+}
+
+/* Стиль для контейнера игрового поля */
+.game-board {
+    display: grid; /* Используем CSS Grid для создания сетки */
+    grid-template-columns: repeat(3, 1fr); /* 3 колонки одинаковой ширины */
+    grid-gap: 5px; /* Расстояние между ячейками */
+    width: 300px; /* Ширина игрового поля */
+    margin: 0 auto; /* Центрируем поле по горизонтали */
+}
+
+/* Стиль для ячеек (кнопок) */
+.cell {
+    width: 100px; /* Ширина кнопки */
+    height: 100px; /* Высота кнопки */
+    font-size: 24px; /* Размер текста */
+    text-align: center; /* Выравнивание текста по центру */
+    line-height: 100px; /* Вертикальное выравнивание текста */
+    border: 2px solid #000; /* Граница кнопки */
+    color: #D10F0F; /* Цвет текста */
+    background-color: #f0f0f0; /* Фон кнопки */
+    cursor: pointer; /* Курсор указывает, что кнопка кликабельна */
+    transition: background-color 0.3s ease; /* Плавное изменение цвета */
+}
+
+/* Стиль для нажатой кнопки */
+.cell:disabled {
+    background-color: #d3d3d3; /* Изменяем фон для заблокированных кнопок */
+    cursor: not-allowed; /* Курсор показывает, что кнопка неактивна */
+}
+
+.cell:hover {
+    background-color: #e0e0e0;
+}
+
+.message {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: #111;
+    margin-bottom: 20px;
+}
+
+.player-type-message {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: #D10F0F;
+    margin-bottom: 20px;
+}
+
+.restart-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #219114;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.restart-button:hover {
+    background-color: #23AC14;
+}
+
+.game-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #073572;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.game-button:hover {
+    background-color: #0056b3;
+}
+
+.saved-games-button {
+    margin-top: 10px;
+    padding: 5px;
+    width: 30%;
+    font-size: 1rem;
+    background-color: #3BD82A;
+    color: 202020;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.saved-games-button:hover {
+    background-color: #219114;
+}
+
+.saved-games-link {
+    text-align: center; /* Выравнивание по центру */
+    margin-top: 40px; /* Отступ сверху */
+}
+
+.button-link {
+    display: inline-block;
+    padding: 10px 20px; /* Внутренние отступы */
+    margin-bottom: 20px;
+    color: #007bff; /* Цвет текста */
+    text-decoration: none; /* Убираем подчеркивание */
+    border-radius: 5px; /* Скругление углов */
+    font-size: 1rem; /* Размер шрифта */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Плавные переходы */
+}
+
+.button-link:hover {
+    background-color: #F6F7F7; /* Темнее цвет фона */
+    transform: scale(1.05); /* Небольшое увеличение */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Легкая тень */
+}
+
+.login-container {
+    display: flex;
+    justify-content: center; /* Центрируем по горизонтали */
+    margin-top: 20 px
+}
+
+.login-form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 20%; /* Ширина формы */
+    background-color: #f4f4f4;
+}
+
+.login-form h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+.login-form input {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #04AA6D;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.login-form button:hover {
+    background-color: #039A62;
+}
+
+.error-message {
+    color: #D71919;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.success-message {
+    color: #13725C;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.saved-games-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.saved-games-table th,
+.saved-games-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.saved-games-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.saved-games-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.load-game-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.load-game-button:hover {
+    background-color: #218838;
+}

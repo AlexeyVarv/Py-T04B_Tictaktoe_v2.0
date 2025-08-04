@@ -1,0 +1,85 @@
+<!-- register.html -->
+{% extends "layout.html" %}
+
+{% block title %}Вход - Крестики-Нолики{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-form">
+        <h2>Регистрация</h2>
+        <div id="error-message" class="error-message" style="display: none;"></div>
+
+        <input type="text" id="login" placeholder="Логин" title="Минимум 3 символа" required>
+
+        <input type="password" id="password" placeholder="Пароль" title="Минимум 6 символов" required>
+
+        <input type="password" id="confirm_password" placeholder="Повторите пароль" title="Подтверждения пароля" required>
+        <button onclick="register()">Зарегистрироваться</button>
+    </div>
+</div>
+<script>
+    let csrfToken = null;
+
+    // Функция для получения CSRF-токена
+    async function fetchCsrfToken() {
+        const response = await fetch('/auth/csrf-token');
+        const data = await response.json();
+        csrfToken = data.csrf_token;
+    }
+
+    // Функция регистрации
+    async function register() {
+        // Получение значений полей
+        const login = document.getElementById('login').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const confirm_password = document.getElementById('confirm_password').value.trim();
+
+        // Очистка предыдущих сообщений об ошибках
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.innerText = '';
+        errorMessage.style.display = 'none';
+
+        // Проверка обязательных полей
+        if (!login || !password || !confirm_password) {
+            errorMessage.innerText = 'Заполните все поля';
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        // Проверка совпадения паролей
+        if (password !== confirm_password) {
+            errorMessage.innerText = 'Пароли не совпадают';
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        // Получение CSRF-токена, если он еще не был получен
+        if (!csrfToken) {
+            await fetchCsrfToken();
+        }
+
+        // Отправка данных на сервер
+        try {
+            const response = await fetch('/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken
+                },
+                body: JSON.stringify({ login, password, confirm_password })
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                window.location.href = result.redirect_url;
+            } else {
+                errorMessage.innerText = result.error;
+                errorMessage.style.display = 'block';
+            }
+        } catch (error) {
+            errorMessage.innerText = 'Ошибка сети';
+            errorMessage.style.display = 'block';
+        }
+    }
+</script>
+{% endblock %}

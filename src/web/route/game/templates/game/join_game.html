@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %}Присоединиться к игре{% endblock %}
+
+{% block content %}
+<h2>Присоединиться к игре</h2>
+<div class="login-container">
+    <div class="login-form">
+        <input type="text" id="game_id" placeholder="Введите ID игры">
+        <button id="join-button">Присоединиться</button>
+    </div>
+</div>
+
+<div id="message"></div>
+
+<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+<script>
+    const socket = io('/game'); // Подключение к пространству имен '/game'
+
+    // Логирование подключения
+    socket.on('connect', () => {
+        console.log('Подключение к серверу установлено');
+    });
+
+    // Логирование ошибок подключения
+    socket.on('connect_error', (error) => {
+        console.error('Ошибка подключения:', error);
+    });
+
+    const current_player_id = '{{ current_player_id }}'; // ID текущего игрока
+
+    // Обработка начала игры
+    socket.on('game_started', (data) => {
+        alert(data.message); // Например: "Игра началась!"
+        window.location.href = `/game/${document.getElementById('game_id').value}`; // Переход на страницу игры
+    });
+
+    // Обработка ожидания второго игрока
+    socket.on('waiting_for_opponent', (data) => {
+        document.getElementById('message').textContent = data.message; // Например: "Ожидание второго игрока..."
+    });
+
+    // Обработка ошибок
+    socket.on('error', (data) => {
+        alert(data.message);
+    });
+
+    // Обработка нажатия кнопки "Присоединиться"
+    document.getElementById('join-button').addEventListener('click', () => {
+        const game_id = document.getElementById('game_id').value.trim();
+        if (!game_id) {
+            alert('Введите ID игры');
+            return;
+        }
+
+        // Отправка события 'join_game' с ID игры и ID гостя
+        socket.emit('join_game', { game_id, guest: current_player_id });
+    });
+</script>
+{% endblock %}

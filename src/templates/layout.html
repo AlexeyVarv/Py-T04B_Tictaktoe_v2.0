@@ -1,0 +1,46 @@
+<!-- layout.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Крестики-Нолики{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="body">
+    <!-- Навигационная панель -->
+    <header class="navbar">
+        <nav class="nav-container">
+            <div class="left-links">
+                <a href="{{ url_for('home') }}" class="nav-button">Главная</a>
+            </div>
+            <div class="right-links">
+                {% if session.get('user_uuid') %}
+                    <!-- Если пользователь авторизован -->
+                    <a href="{{ url_for('auth.view_profile', user_uuid=session['user_uuid']) }}" class="nav-button">
+                        {{ session['user_uuid'][:12] }}... <!-- Отображаем первые 12 символов UUID -->
+                    </a>
+                    <a href="{{ url_for('auth.logout') }}" class="nav-button">Выход</a>
+                {% else %}
+                    <!-- Если пользователь не авторизован -->
+                    <a href="{{ url_for('auth.login') }}" class="nav-button">Вход</a>
+                    <a href="{{ url_for('auth.register') }}" class="reg-button">Регистрация</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+    <div class="page-container">
+    <!-- Основной контент -->
+        <main class="content">
+            {% block content %}
+            <!-- Здесь будет содержимое дочерних шаблонов -->
+            {% endblock %}
+        </main>
+
+        <!-- Подвал -->
+        <footer class="footer">
+            <p>&copy; 2025 Крестики-Нолики. Все права защищены.</p>
+        </footer>
+    </div>
+</body>
+</html>

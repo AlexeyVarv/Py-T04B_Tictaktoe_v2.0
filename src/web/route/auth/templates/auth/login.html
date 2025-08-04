@@ -1,0 +1,84 @@
+<!-- login.html -->
+{% extends "layout.html" %}
+
+{% block title %}Вход - Крестики-Нолики{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-form">
+        <h2>Авторизация</h2>
+
+        {% if message %}
+        <div class="success-message">
+            {{ message }}
+        </div>
+        {% endif %}
+        <!-- Сообщение об ошибке -->
+        <div id="error-message" class="error-message" style="display: none;"></div>
+
+        <!-- Поля ввода -->
+
+        <input type="text" id="login" placeholder="Логин" required>
+
+        <input type="password" id="password" placeholder="Пароль" required>
+        <button onclick="login()">Войти</button>
+
+        <!-- Ссылка на регистрацию -->
+        <div style="text-align: center; margin-top: 10px;">
+            Нет аккаунта? <a href="{{ url_for('auth.register') }}">Зарегистрироваться</a>
+        </div>
+    </div>
+</div>
+<script>
+    // Отображение серверного сообщения об ошибке
+    const serverError = "{{ error }}";
+    if (serverError) {
+        const errorMessageElement = document.getElementById('error-message');
+        errorMessageElement.innerText = serverError;
+        errorMessageElement.style.display = 'block';
+    }
+
+    function login() {
+        // Получение логина и пароля
+        const login = document.getElementById('login').value;
+        const password = document.getElementById('password').value;
+
+        // Формирование строки login:password
+        const credentials = `${login}:${password}`;
+
+        // Кодирование в Base64
+        const authHeader = `Basic ${btoa(credentials)}`;
+
+        // Получение параметра next из текущего URL
+        const nextUrl = new URLSearchParams(window.location.search).get('next') || '/';
+
+        // Отправка POST-запроса с параметром next
+        fetch(`/auth/login?next=${encodeURIComponent(nextUrl)}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': authHeader,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                // Перенаправление на страницу, указанную в next
+                response.json().then(data => {
+                    window.location.href = data.redirect_url || '/';
+                });
+            } else {
+                // Обработка ошибки
+                response.json().then(data => {
+                    document.getElementById('error-message').innerText = data.error || 'Ошибка авторизации';
+                    document.getElementById('error-message').style.display = 'block';
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            document.getElementById('error-message').innerText = 'Ошибка сети';
+            document.getElementById('error-message').style.display = 'block';
+        });
+    }
+</script>
+{% endblock %}
