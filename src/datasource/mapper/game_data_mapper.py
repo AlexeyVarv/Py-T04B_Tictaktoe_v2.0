@@ -3,6 +3,7 @@ from domain.model.game_server import GameServer
 
 
 class GameDataMapper:
+    """Переносит данные из БД в модель игры и обратно"""
     @staticmethod
     def game_from_database(db, game_uuid, saved_games):
         """Возвращает игру из БД по uuid и переводит в формат модели бизнес-логики"""

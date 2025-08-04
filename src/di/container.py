@@ -7,6 +7,20 @@ from datasource.model.db_params import define_models
 
 
 class Container(containers.DeclarativeContainer):
+    """
+    Класс контейнера для управления зависимостями приложения.
+    Использует Dependency Injector для внедрения зависимостей между компонентами.
+
+    Атрибуты:
+        db: Singleton для подключения к базе данных (SQLAlchemy).
+        models: Singleton для определения моделей базы данных.
+        repository: Factory для создания репозитория с зависимостью от db и моделей.
+        data_service: Factory для создания сервиса данных с зависимостью от репозитория.
+        auth_service: Factory для создания сервиса авторизации с зависимостью от сервиса данных.
+
+    Методы:
+        Нет пользовательских методов, так как класс является декларативным контейнером.
+    """
     # Инициализация db
     db = providers.Singleton(SQLAlchemy)
 

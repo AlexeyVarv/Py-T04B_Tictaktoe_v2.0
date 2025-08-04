@@ -7,6 +7,7 @@ from sqlalchemy.sql import func
 
 
 def define_models(db):
+    """Создание классов, представляющих таблицы в БД"""
     class Players(db.Model):
         id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
         login: Mapped[str] = mapped_column(unique=True, nullable=False)
